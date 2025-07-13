@@ -1,0 +1,35 @@
+minikube start --driver=docker
+kubectl create namespace jenkins
+kubectl create sa jenkins -n jenkins
+kubectl create token jenkins -n jenkins --duration=8760h
+kubectl create rolebinding jenkins-admin-binding --clusterrole=admin --serviceaccount=jenkins:jenkins --namespace=jenkins
+kubectl config view
+
+----test jenkinsfile-----
+
+pipeline {
+  agent {
+    kubernetes {
+      yaml '''
+        apiVersion: v1
+        kind: Pod
+        spec:
+          containers:
+          - name: ubuntu
+            image: ubuntu:latest
+            command:
+            - cat
+            tty: true
+        '''
+    }
+  }
+  stages {
+    stage('Run ubuntu') {
+      steps {
+        container('ubuntu') {
+          sh 'ls'
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,57 @@
+pipeline {
+    agent any
+
+    environment {
+        // Define the Kubernetes credentials ID (Jenkins Credential Store)
+        KUBE_CREDENTIALS = 'minikube-token'
+    }
+
+    stages {
+        stage('Check Repo') {
+            steps {
+                script {
+                    bat 'dir' // Windows-specific command to check directory content
+                }
+            }
+        }
+stage('Clone Repository') {
+    steps {
+        script {
+            if (!fileExists('.git')) {
+                echo "Cloning repository for the first time..."
+                bat 'git clone -b main https://github.com/yagizkarakus/Huawei_Devops_bootcamp.git .'
+            } else {
+                echo "Repository already exists. Fetching latest changes..."
+                bat '''
+                    git remote set-url origin https://github.com/yagizkarakus/Huawei_Devops_bootcamp.git
+                    git fetch origin
+                    git reset --hard origin/main
+                '''
+            }
+        }
+    }
+}
+
+
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    // Build the Docker image in the specified directory
+                    bat 'docker build -t test:latest ./src/frontend/'
+                }
+            }
+        }
+
+        stage('Kubernetes Apply') {
+            steps {
+                script {
+                    // Ensure kubectl is set up with the credentials from Jenkins
+                    kubeconfig(credentialsId: 'token', serverUrl: 'https://127.0.0.1:15839') {
+                        bat 'kubectl apply -f ./kubernetes-manifests/frontend.yaml --validate=false -n jenkins'
+                    }
+                }
+            }
+        }
+    }
+}

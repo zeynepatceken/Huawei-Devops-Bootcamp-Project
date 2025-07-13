@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+
+  traefik:
+    image: traefik:v2.11
+    command:
+      - --api.dashboard=true
+      - --api.insecure=true
+      - --providers.docker=true
+      - --entrypoints.web.address=:80
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+  whoami:
+    image: traefik/whoami
+    container_name: whoami
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.whoami.rule=PathPrefix(`/whoami`)"
+      - "traefik.http.routers.whoami.entrypoints=web"
+      - "traefik.http.services.whoami.loadbalancer.server.port=80"
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    volumes:
+      - ./services/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nginx.rule=PathPrefix(`/nginx`)"
+      - "traefik.http.routers.nginx.entrypoints=web"
+      - "traefik.http.services.nginx.loadbalancer.server.port=80"
