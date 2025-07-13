@@ -11,8 +11,3 @@
 | checkoutservice                                    | Go            | 
 | recommendationservice                              | Python        |
 | loadgenerator                                      | Python/Locust | 
-
-
-
-
-
