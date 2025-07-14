@@ -36,3 +36,17 @@ Each service has its own Dockerfile and can be built and deployed independently.
 - **Docker containers** 🐳: Separate Docker images created for each service, runnable as containers.
 - **gRPC communication** ⚡: Fast and type-safe communication between services.
 - **Alpine Linux based images**
+
+## Setup and Running
+
+### Requirements
+
+- Docker installed
+- Node.js (for development)
+- Git
+
+### Clone the project
+
+```bash
+git clone https://github.com/zeynepatceken/Huawei-Devops-Bootcamp-Project.git
+cd Huawei-Devops-Bootcamp-Project/src/paymentservice
