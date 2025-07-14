@@ -49,4 +49,4 @@ Each service has its own Dockerfile and can be built and deployed independently.
 
 ```bash
 git clone https://github.com/zeynepatceken/Huawei-Devops-Bootcamp-Project.git
-cd Huawei-Devops-Bootcamp-Project/src/paymentservice
+cd Huawei-Devops-Bootcamp-Project/...
