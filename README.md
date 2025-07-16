@@ -28,7 +28,6 @@ This project is a set of microservice-based applications developed as part of th
 
 Each service has its own Dockerfile and can be built and deployed independently.
 
----
 
 ## ✨ Project Features
 
